@@ -1,12 +1,45 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useEffect } from 'react';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import HeroSection from '@/components/sections/HeroSection';
+import ServicesSection from '@/components/sections/ServicesSection';
+import AboutSection from '@/components/sections/AboutSection';
+import TeamSection from '@/components/sections/TeamSection';
+import ContactSection from '@/components/sections/ContactSection';
 
 const Index = () => {
+  useEffect(() => {
+    // Animation observer for scroll animations
+    const animationObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Get all elements that need to be animated
+    const animatedElements = document.querySelectorAll('.reveal-animation');
+    animatedElements.forEach(el => animationObserver.observe(el));
+
+    // Clean up
+    return () => animationObserver.disconnect();
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      
+      <main className="flex-grow">
+        <HeroSection />
+        <ServicesSection />
+        <AboutSection />
+        <TeamSection />
+        <ContactSection />
+      </main>
+      
+      <Footer />
     </div>
   );
 };
