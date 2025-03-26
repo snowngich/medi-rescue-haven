@@ -102,10 +102,14 @@ interface EmergencyCaseProps {
 
 const EmergencyCase = ({ image, title, description }: EmergencyCaseProps) => {
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
       <div className="relative h-48 overflow-hidden">
-        <img src={image} alt={title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-medical-800/80 to-transparent"></div>
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-medical-800/80 via-medical-900/30 to-transparent"></div>
         <h3 className="absolute bottom-3 left-4 text-white font-bold text-lg">{title}</h3>
       </div>
       <CardContent className="p-4">
