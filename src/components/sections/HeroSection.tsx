@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import EmergencyButton from '../ui/EmergencyButton';
 import { Card, CardContent } from '../ui/card';
 
@@ -101,15 +101,44 @@ interface EmergencyCaseProps {
 }
 
 const EmergencyCase = ({ image, title, description }: EmergencyCaseProps) => {
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  // Fallback images based on emergency type
+  const getFallbackImage = (title: string) => {
+    if (title.includes('Cardiac')) {
+      return 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80';
+    } else if (title.includes('Accidents')) {
+      return 'https://images.unsplash.com/photo-1609146708541-edefb0fcd133?auto=format&fit=crop&w=800&q=80';
+    } else {
+      return 'https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=800&q=80';
+    }
+  };
+
+  const handleImageLoad = () => {
+    setImgLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setImgError(true);
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden bg-medical-200">
         <img 
-          src={image} 
+          src={imgError ? getFallbackImage(title) : image} 
           alt={title} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-medical-800/80 via-medical-900/30 to-transparent"></div>
+        {!imgLoaded && !imgError && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-4 border-medical-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-medical-800/90 via-medical-900/40 to-transparent"></div>
         <h3 className="absolute bottom-3 left-4 text-white font-bold text-lg">{title}</h3>
       </div>
       <CardContent className="p-4">
