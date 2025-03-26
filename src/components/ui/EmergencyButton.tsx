@@ -3,7 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Phone } from 'lucide-react';
 
-interface EmergencyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface EmergencyButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   phoneNumber?: string;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -25,8 +25,8 @@ const EmergencyButton = ({
     <a 
       href={`tel:${phoneNumber}`}
       className={cn(
-        'group flex items-center justify-center gap-2 rounded-full bg-emergency text-white font-medium transition-all',
-        'hover:bg-emergency/90 focus:outline-none focus:ring-4 focus:ring-emergency/30',
+        'group flex items-center justify-center gap-2 rounded-full bg-medical-500 text-white font-medium transition-all',
+        'hover:bg-medical-600 focus:outline-none focus:ring-4 focus:ring-medical-300',
         'shadow-elevated animate-pulse-emergency',
         sizeClasses[size],
         className

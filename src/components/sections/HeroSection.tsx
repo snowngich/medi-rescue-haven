@@ -23,7 +23,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="min-h-screen relative flex items-center bg-gradient-to-b from-medical-50 to-white pt-20">
+    <section className="min-h-screen relative flex items-center bg-gradient-to-b from-medical-100 to-white pt-20">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=3506&q=80')] bg-cover bg-center opacity-[0.03] z-0"></div>
       
       <div className="section-container relative z-10" ref={heroRef}>
