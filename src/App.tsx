@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
-import AIAssistant from "./components/ui/AIAssistant";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +24,6 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <AIAssistant />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

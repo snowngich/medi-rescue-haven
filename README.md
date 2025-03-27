@@ -1,69 +1,56 @@
-# Welcome to your Lovable project
 
-## Project info
+# MediRescue
 
-**URL**: https://lovable.dev/projects/7dbb94eb-b16e-44df-8b46-f874d1359f7f
+## Emergency Medical Response Platform
 
-## How can I edit this code?
+MediRescue revolutionizes emergency medical response by connecting those in need with help—instantly. With real-time emergency alerts, nearby medical professionals and hospitals are notified immediately, ensuring swift assistance.
 
-There are several ways of editing your application.
+## Key Features
 
-**Use Lovable**
+- **Instant Emergency Alerts**: Notify nearby medical professionals and hospitals immediately
+- **AI-Powered Location Tracking**: Pinpoint the closest available responders, cutting down critical delays
+- **One-Tap Emergency Requests**: Summon help effortlessly with just a single tap
+- **Integrated Ambulance Dispatch**: Ensure rapid medical transport coordination
+- **User Medical Profiles**: Provide responders with vital health details for more effective care
+- **Multi-Channel Communication**: Keep coordination seamless with calls, SMS, and in-app alerts
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7dbb94eb-b16e-44df-8b46-f874d1359f7f) and start prompting.
+## Technology Stack
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
 - React
-- shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Getting Started
 
-Simply open [Lovable](https://lovable.dev/projects/7dbb94eb-b16e-44df-8b46-f874d1359f7f) and click on Share -> Publish.
+```sh
+# Clone the repository
+git clone <repository-url>
 
-## I want to use a custom domain - is that possible?
+# Navigate to the project directory
+cd medirescue
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+# Install dependencies
+npm i
+
+# Start the development server
+npm run dev
+```
+
+## Deployment
+
+To deploy this application:
+
+```sh
+# Build the application
+npm run build
+
+# Preview the build locally
+npm run preview
+```
+
+## About MediRescue
+
+With MediRescue, help is always just a tap away. Our platform bridges the critical gap between patients and emergency medical services, leveraging technology to save lives when every second counts.
