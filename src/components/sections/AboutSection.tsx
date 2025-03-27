@@ -11,7 +11,7 @@ const features = [
   {
     icon: Shield,
     title: 'Reliable Connection',
-    description: 'Advanced technology ensures you're never cut off from emergency services when you need them most.'
+    description: 'Advanced technology ensures you\'re never cut off from emergency services when you need them most.'
   },
   {
     icon: HeartPulse,
