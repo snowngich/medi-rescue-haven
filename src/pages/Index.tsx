@@ -29,8 +29,8 @@ const Index = () => {
     // Show welcome toast
     toast({
       title: "Welcome to MediRescue",
-      description: "Help is just a tap away. Explore how we connect patients to emergency assistance.",
-      duration: 5000,
+      description: "Help is just a tap away. Need assistance? Try our AI chat in the bottom right.",
+      duration: 6000,
     });
 
     // Clean up

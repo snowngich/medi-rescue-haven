@@ -1,8 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogIn, User } from 'lucide-react';
 import EmergencyButton from '../ui/EmergencyButton';
+import { Link } from 'react-router-dom';
+import { Button } from '../ui/button';
 
 interface NavItem {
   label: string;
@@ -40,9 +42,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <a href="#" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <span className="text-2xl font-bold text-medical-700">MediRescue</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
@@ -57,8 +59,20 @@ const Navbar = () => {
             ))}
           </nav>
 
-          {/* Emergency Button */}
-          <div className="hidden md:block">
+          {/* Auth & Emergency Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Link to="/login">
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <LogIn className="w-4 h-4" />
+                <span>Login</span>
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button variant="outline" size="sm" className="flex items-center gap-1 border-medical-200">
+                <User className="w-4 h-4" />
+                <span>Sign Up</span>
+              </Button>
+            </Link>
             <EmergencyButton size="sm" />
           </div>
 
@@ -95,6 +109,14 @@ const Navbar = () => {
               {item.label}
             </a>
           ))}
+          <div className="grid grid-cols-2 gap-2 pt-2">
+            <Link to="/login" className="block" onClick={() => setIsMenuOpen(false)}>
+              <Button variant="outline" className="w-full justify-center">Login</Button>
+            </Link>
+            <Link to="/signup" className="block" onClick={() => setIsMenuOpen(false)}>
+              <Button variant="outline" className="w-full justify-center">Sign Up</Button>
+            </Link>
+          </div>
           <div className="pt-2">
             <EmergencyButton className="w-full justify-center" />
           </div>
