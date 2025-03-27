@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import EmergencyButton from '../ui/EmergencyButton';
 import { Card, CardContent } from '../ui/card';
+import { MapPin, Clock, Shield, Phone, FileText } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -26,19 +27,19 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen relative flex items-center bg-gradient-to-b from-medical-100 to-white pt-20 overflow-hidden">
       {/* Background overlay with medical emergency scene */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-[0.15] z-0"></div>
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1587351021759-3e566b3db3f7?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-[0.15] z-0"></div>
       <div className="absolute inset-0 bg-gradient-to-b from-medical-900/30 to-white/80 z-0"></div>
       
       <div className="section-container relative z-10" ref={heroRef}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="stagger-animation">
-            <span className="inline-block px-3 py-1 rounded-full bg-medical-100 text-medical-700 font-medium text-sm mb-5 reveal-animation">24/7 Emergency Medical Response</span>
+            <span className="inline-block px-3 py-1 rounded-full bg-medical-100 text-medical-700 font-medium text-sm mb-5 reveal-animation">When Every Second Counts</span>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 reveal-animation">
-              Rapid Medical <span className="text-medical-600">Emergency</span> Response
+              Connecting You To <span className="text-medical-600">Emergency</span> Help Instantly
             </h1>
             <p className="text-xl text-neutral-600 mb-8 max-w-xl reveal-animation">
-              Professional medical rescue services with state-of-the-art equipment and highly trained personnel available around the clock.
+              MediRescue revolutionizes emergency medical response by connecting those in need with help—instantly, ensuring swift assistance when it matters most.
             </p>
             <div className="flex flex-wrap gap-4 reveal-animation">
               <EmergencyButton size="lg" />
@@ -46,7 +47,7 @@ const HeroSection = () => {
                 href="#services" 
                 className="inline-flex items-center justify-center rounded-full bg-white border border-neutral-200 px-7 py-3.5 text-lg font-medium text-neutral-800 hover:bg-neutral-50 transition-colors shadow-subtle"
               >
-                Our Services
+                How It Works
               </a>
             </div>
           </div>
@@ -56,36 +57,36 @@ const HeroSection = () => {
             <div className="absolute inset-0 bg-gradient-radial from-medical-100/50 to-transparent rounded-2xl -m-6"></div>
             <div className="glass-card rounded-2xl overflow-hidden shadow-premium relative">
               <img 
-                src="https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=1000&q=80" 
-                alt="Medical Emergency Patient" 
+                src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=1000&q=80" 
+                alt="Emergency Medical App Interface" 
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <p className="font-medium">Our response teams are equipped with advanced life support technology</p>
+                <p className="font-medium">Instant one-tap emergency alerts connect you to help when you need it most</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Emergency Cases Grid */}
+        {/* Key Features Grid */}
         <div className="mt-16 reveal-animation">
-          <h2 className="text-2xl font-bold mb-6 text-center">Emergency Situations We Respond To</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">What MediRescue Offers</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <EmergencyCase 
-              image="https://images.unsplash.com/photo-1530026454586-3364b0560d90?auto=format&fit=crop&w=800&q=80"
-              title="Cardiac Emergencies"
-              description="Fast response for heart attacks, chest pain, and other cardiac events"
+            <FeatureCard 
+              icon={Phone}
+              title="Omni-Channel Response"
+              description="Simultaneous alerts via voice call, text message, and push notification"
             />
-            <EmergencyCase 
-              image="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=800&q=80"
-              title="Accidents & Trauma"
-              description="Immediate care for injuries from accidents, falls, and other traumatic events"
+            <FeatureCard 
+              icon={MapPin}
+              title="Smart Location Detection"
+              description="Automatic GPS and AI tracking to locate nearest responders"
             />
-            <EmergencyCase 
-              image="https://images.unsplash.com/photo-1631815588090-d4bfec5b7e9a?auto=format&fit=crop&w=800&q=80"
-              title="Medical Crises"
-              description="Expert response for strokes, seizures, allergic reactions, and other urgent medical needs"
+            <FeatureCard 
+              icon={Clock}
+              title="Instant Alert Activation"
+              description="Single-button emergency triggering for rapid response"
             />
           </div>
         </div>
@@ -94,56 +95,24 @@ const HeroSection = () => {
   );
 };
 
-interface EmergencyCaseProps {
-  image: string;
+interface FeatureCardProps {
+  icon: React.ElementType;
   title: string;
   description: string;
 }
 
-const EmergencyCase = ({ image, title, description }: EmergencyCaseProps) => {
-  const [imgLoaded, setImgLoaded] = useState(false);
-  const [imgError, setImgError] = useState(false);
-
-  // Fallback images based on emergency type
-  const getFallbackImage = (title: string) => {
-    if (title.includes('Cardiac')) {
-      return 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80';
-    } else if (title.includes('Accidents')) {
-      return 'https://images.unsplash.com/photo-1609146708541-edefb0fcd133?auto=format&fit=crop&w=800&q=80';
-    } else {
-      return 'https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=800&q=80';
-    }
-  };
-
-  const handleImageLoad = () => {
-    setImgLoaded(true);
-  };
-
-  const handleImageError = () => {
-    setImgError(true);
-  };
+const FeatureCard = ({ icon: Icon, title, description }: FeatureCardProps) => {
+  const [imgLoaded, setImgLoaded] = useState(true);
 
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
-      <div className="relative h-48 overflow-hidden bg-medical-200">
-        <img 
-          src={imgError ? getFallbackImage(title) : image} 
-          alt={title} 
-          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-        />
-        {!imgLoaded && !imgError && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-4 border-medical-600 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-medical-800/90 via-medical-900/40 to-transparent"></div>
-        <h3 className="absolute bottom-3 left-4 text-white font-bold text-lg">{title}</h3>
+    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group border-medical-200">
+      <div className="p-6">
+        <div className="mb-4 w-12 h-12 rounded-full bg-medical-100 flex items-center justify-center text-medical-600 group-hover:bg-medical-600 group-hover:text-white transition-colors duration-300">
+          <Icon className="w-6 h-6" />
+        </div>
+        <h3 className="font-bold text-lg mb-2">{title}</h3>
+        <p className="text-neutral-600">{description}</p>
       </div>
-      <CardContent className="p-4">
-        <p className="text-sm text-neutral-600">{description}</p>
-      </CardContent>
     </Card>
   );
 };

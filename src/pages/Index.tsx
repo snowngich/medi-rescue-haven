@@ -7,8 +7,11 @@ import ServicesSection from '@/components/sections/ServicesSection';
 import AboutSection from '@/components/sections/AboutSection';
 import TeamSection from '@/components/sections/TeamSection';
 import ContactSection from '@/components/sections/ContactSection';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
+  const { toast } = useToast();
+  
   useEffect(() => {
     // Animation observer for scroll animations
     const animationObserver = new IntersectionObserver((entries) => {
@@ -23,9 +26,16 @@ const Index = () => {
     const animatedElements = document.querySelectorAll('.reveal-animation');
     animatedElements.forEach(el => animationObserver.observe(el));
 
+    // Show welcome toast
+    toast({
+      title: "Welcome to MediRescue",
+      description: "Help is just a tap away. Explore how we connect patients to emergency assistance.",
+      duration: 5000,
+    });
+
     // Clean up
     return () => animationObserver.disconnect();
-  }, []);
+  }, [toast]);
 
   return (
     <div className="flex flex-col min-h-screen">

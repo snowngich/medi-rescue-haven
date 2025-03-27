@@ -1,38 +1,38 @@
 
 import React, { useEffect, useRef } from 'react';
 import ServiceCard from '../ui/ServiceCard';
-import { Ambulance, Heart, HeartPulse, UserRound, BookOpen, Home } from 'lucide-react';
+import { Ambulance, Heart, HeartPulse, UserRound, FileText, MapPin, Phone, Clock, Shield } from 'lucide-react';
 
 const services = [
   {
-    title: 'Emergency Response',
-    description: 'Immediate medical attention from our expert teams with fully equipped ambulances available 24/7.',
+    title: 'Digital Health Briefing',
+    description: 'Secure access to your medical history for informed treatment during emergencies.',
+    icon: FileText
+  },
+  {
+    title: 'Live Emergency Dispatch',
+    description: 'Immediate connection to medical teams, hospitals, and ambulance services when you need them.',
     icon: Ambulance
   },
   {
-    title: 'Critical Care',
-    description: 'Specialized care for life-threatening emergencies with advanced medical equipment and trained professionals.',
-    icon: HeartPulse
+    title: 'Smart Location Detection',
+    description: 'AI-powered location tracking pinpoints the closest available responders, cutting down critical delays.',
+    icon: MapPin
   },
   {
-    title: 'Medical Transport',
-    description: 'Safe and comfortable transportation for patients requiring medical attention while in transit.',
-    icon: Heart
-  },
-  {
-    title: 'Emergency Doctors',
-    description: 'Access to experienced emergency physicians for immediate medical consultation and treatment.',
+    title: 'Emergency Responder Network',
+    description: 'Connect with nearby medical professionals instantly through our extensive professional network.',
     icon: UserRound
   },
   {
-    title: 'First Aid Training',
-    description: 'Comprehensive training programs to equip individuals with essential life-saving skills and knowledge.',
-    icon: BookOpen
+    title: 'Multi-Channel Communication',
+    description: 'Seamless coordination through calls, SMS, and in-app alerts keeps everyone informed and response quick.',
+    icon: Phone
   },
   {
-    title: 'Home Care Services',
-    description: 'Professional medical assistance in the comfort of your home for recovery and ongoing treatment.',
-    icon: Home
+    title: 'One-Tap Emergency Request',
+    description: 'Summon help effortlessly with just a single tap when every second counts in a medical emergency.',
+    icon: Clock
   }
 ];
 
@@ -61,9 +61,9 @@ const ServicesSection = () => {
       <div className="section-container">
         <div className="text-center mb-16 stagger-animation">
           <span className="inline-block px-3 py-1 rounded-full bg-medical-100 text-medical-700 font-medium text-sm mb-5 reveal-animation">Our Services</span>
-          <h2 className="section-title reveal-animation">Comprehensive Emergency Medical Services</h2>
+          <h2 className="section-title reveal-animation">Revolutionizing Emergency Medical Response</h2>
           <p className="section-subtitle mx-auto reveal-animation">
-            We provide a range of professional medical emergency services with state-of-the-art equipment and highly trained personnel.
+            When medical responses are delayed, it can lead to serious health complications. MediRescue provides faster, more reliable access to emergency assistance when every second counts.
           </p>
         </div>
 

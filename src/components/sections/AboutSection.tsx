@@ -1,27 +1,27 @@
 
 import React, { useEffect, useRef } from 'react';
-import { CheckCircle2, Clock, HeartPulse, Shield } from 'lucide-react';
+import { Clock, Shield, HeartPulse, MapPin } from 'lucide-react';
 
 const features = [
   {
     icon: Clock,
-    title: '24/7 Availability',
-    description: 'Our emergency response teams are available around the clock to provide immediate assistance.'
+    title: 'Immediate Response Time',
+    description: 'Our platform connects you to help in seconds, drastically reducing traditional emergency response delays.'
   },
   {
     icon: Shield,
-    title: 'Certified Professionals',
-    description: 'All our medical staff are certified professionals with extensive emergency response training.'
+    title: 'Reliable Connection',
+    description: 'Advanced technology ensures you're never cut off from emergency services when you need them most.'
   },
   {
     icon: HeartPulse,
-    title: 'Advanced Equipment',
-    description: 'We utilize state-of-the-art medical equipment to provide the best possible care during emergencies.'
+    title: 'AI-Powered Dispatch',
+    description: 'Smart algorithms match your emergency with the nearest and most appropriate medical resources.'
   },
   {
-    icon: CheckCircle2,
-    title: 'Rapid Response',
-    description: 'Our teams are strategically positioned to ensure the quickest possible response times.'
+    icon: MapPin,
+    title: 'Precise Location Tracking',
+    description: 'Our system accurately pinpoints your location to guide responders directly to you in an emergency.'
   }
 ];
 
@@ -53,8 +53,8 @@ const AboutSection = () => {
           <div className="relative reveal-animation">
             <div className="relative rounded-2xl overflow-hidden shadow-premium">
               <img
-                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80"
-                alt="Medical Emergency Team in Action"
+                src="https://images.unsplash.com/photo-1551884170-09fb70a3a2ed?auto=format&fit=crop&w=1000&q=80"
+                alt="Emergency Medical Connection Platform"
                 className="w-full h-auto object-cover aspect-[4/3]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
@@ -62,10 +62,10 @@ const AboutSection = () => {
             <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-subtle p-4 max-w-xs">
               <div className="flex items-center space-x-3 mb-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <p className="font-semibold text-sm">Always Ready to Respond</p>
+                <p className="font-semibold text-sm">Always Connected</p>
               </div>
               <p className="text-neutral-600 text-sm">
-                Our emergency teams maintain a constant state of readiness to respond within minutes
+                Our platform ensures you're always connected to emergency help, no matter where you are
               </p>
             </div>
           </div>
@@ -73,9 +73,9 @@ const AboutSection = () => {
           {/* Content Side */}
           <div className="stagger-animation">
             <span className="inline-block px-3 py-1 rounded-full bg-medical-100 text-medical-700 font-medium text-sm mb-5 reveal-animation">About MediRescue</span>
-            <h2 className="section-title reveal-animation">We're Committed to Saving Lives</h2>
+            <h2 className="section-title reveal-animation">Bridging The Gap Between You And Emergency Help</h2>
             <p className="text-lg text-neutral-600 mb-8 reveal-animation">
-              MediRescue was founded with a clear mission: to provide fast, reliable, and professional emergency medical services when they're needed most. With decades of combined experience, our team is dedicated to delivering exceptional care in critical situations.
+              Traditional systems often have inefficiencies that make emergency medical response slow and complicated. MediRescue was created to solve this critical problem by instantly connecting patients to the help they need when every second counts.
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 reveal-animation">
