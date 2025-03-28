@@ -10,7 +10,7 @@ interface EmergencyButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElem
 
 const EmergencyButton = ({
   className,
-  phoneNumber = "911",
+  phoneNumber = "0722446473",
   size = 'md',
   ...props
 }: EmergencyButtonProps) => {

@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/sections/HeroSection';
 import ServicesSection from '@/components/sections/ServicesSection';
 import AboutSection from '@/components/sections/AboutSection';
-import TeamSection from '@/components/sections/TeamSection';
+import PartnersSection from '@/components/sections/PartnersSection';
 import ContactSection from '@/components/sections/ContactSection';
 import { useToast } from '@/hooks/use-toast';
 
@@ -45,7 +45,7 @@ const Index = () => {
         <HeroSection />
         <ServicesSection />
         <AboutSection />
-        <TeamSection />
+        <PartnersSection />
         <ContactSection />
       </main>
       

@@ -33,7 +33,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-neutral-800 mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {['Home', 'About', 'Services', 'Team', 'Contact'].map((item) => (
+              {['Home', 'About', 'Services', 'Partners', 'Contact'].map((item) => (
                 <li key={item}>
                   <a href={`#${item.toLowerCase()}`} className="text-neutral-600 hover:text-medical-600 transition-colors">
                     {item}
@@ -70,19 +70,19 @@ const Footer = () => {
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-medical-600 mr-2 mt-0.5" />
                 <span className="text-neutral-600">
-                  123 Rescue Avenue<br />Medical District, CA 90210
+                  Westlands Business Park<br />Nairobi, Kenya
                 </span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-medical-600 mr-2" />
-                <a href="tel:911" className="text-neutral-600 hover:text-medical-600 transition-colors">
-                  Emergency: 911
+                <a href="tel:0722446473" className="text-neutral-600 hover:text-medical-600 transition-colors">
+                  Emergency: 0722446473
                 </a>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-medical-600 mr-2" />
-                <a href="tel:+11234567890" className="text-neutral-600 hover:text-medical-600 transition-colors">
-                  Office: (123) 456-7890
+                <a href="tel:+254722446473" className="text-neutral-600 hover:text-medical-600 transition-colors">
+                  Office: +254 722 446 473
                 </a>
               </li>
               <li className="flex items-center">
