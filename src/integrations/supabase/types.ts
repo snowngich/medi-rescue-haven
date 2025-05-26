@@ -9,7 +9,163 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      emergency_requests: {
+        Row: {
+          created_at: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          medical_profile_id: string | null
+          responder_note: string | null
+          status: Database["public"]["Enums"]["emergency_status"] | null
+          timestamp: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          medical_profile_id?: string | null
+          responder_note?: string | null
+          status?: Database["public"]["Enums"]["emergency_status"] | null
+          timestamp?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          medical_profile_id?: string | null
+          responder_note?: string | null
+          status?: Database["public"]["Enums"]["emergency_status"] | null
+          timestamp?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emergency_requests_medical_profile_id_fkey"
+            columns: ["medical_profile_id"]
+            isOneToOne: false
+            referencedRelation: "medical_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "emergency_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medical_profiles: {
+        Row: {
+          allergies: string[] | null
+          blood_type: string | null
+          conditions: string[] | null
+          created_at: string | null
+          emergency_contacts: string[] | null
+          id: string
+          medications: string[] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          allergies?: string[] | null
+          blood_type?: string | null
+          conditions?: string[] | null
+          created_at?: string | null
+          emergency_contacts?: string[] | null
+          id?: string
+          medications?: string[] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          allergies?: string[] | null
+          blood_type?: string | null
+          conditions?: string[] | null
+          created_at?: string | null
+          emergency_contacts?: string[] | null
+          id?: string
+          medications?: string[] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_locations: {
+        Row: {
+          id: string
+          lat: number
+          lng: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          lat: number
+          lng: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          lat?: number
+          lng?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_locations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          phone_number: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          name: string
+          phone_number: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          phone_number?: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +174,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      emergency_status: "pending" | "dispatched" | "resolved"
+      user_role: "user" | "responder"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +290,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      emergency_status: ["pending", "dispatched", "resolved"],
+      user_role: ["user", "responder"],
+    },
   },
 } as const

@@ -1,25 +1,31 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
 import { Phone } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Login = () => {
-  const { toast } = useToast();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate login success
-    toast({
-      title: "Login successful",
-      description: "Welcome back to MediRescue!",
-    });
-    navigate('/');
+    setLoading(true);
+    try {
+      await signIn(email, password);
+      navigate('/');
+    } catch (error) {
+      // Error is handled in the useAuth hook
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,7 +41,14 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" required />
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="your@email.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required 
+              />
             </div>
             
             <div className="space-y-2">
@@ -45,7 +58,13 @@ const Login = () => {
                   Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input 
+                id="password" 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required 
+              />
             </div>
             
             <div className="flex items-center space-x-2">
@@ -53,8 +72,12 @@ const Login = () => {
               <Label htmlFor="remember" className="text-sm font-normal">Remember me</Label>
             </div>
             
-            <Button type="submit" className="w-full bg-medical-600 hover:bg-medical-700">
-              Login
+            <Button 
+              type="submit" 
+              className="w-full bg-medical-600 hover:bg-medical-700"
+              disabled={loading}
+            >
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
           
@@ -65,24 +88,6 @@ const Login = () => {
                 Sign up
               </Link>
             </p>
-          </div>
-          
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-neutral-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-neutral-50 text-neutral-500">Or continue with</span>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="w-full">
-              Google
-            </Button>
-            <Button variant="outline" className="w-full">
-              Apple
-            </Button>
           </div>
           
           <div className="mt-8 text-center">

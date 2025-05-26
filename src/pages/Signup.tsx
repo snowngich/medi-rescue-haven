@@ -1,25 +1,42 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Phone } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Signup = () => {
-  const { toast } = useToast();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
+    role: 'user' as 'user' | 'responder'
+  });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate signup success
-    toast({
-      title: "Account created successfully",
-      description: "Welcome to MediRescue! Your profile has been set up.",
-    });
-    navigate('/');
+    setLoading(true);
+    try {
+      await signUp(formData.email, formData.password, {
+        name: `${formData.firstName} ${formData.lastName}`,
+        phone_number: formData.phoneNumber,
+        role: formData.role
+      });
+      navigate('/login');
+    } catch (error) {
+      // Error is handled in the useAuth hook
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,27 +53,74 @@ const Signup = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="first-name">First name</Label>
-                <Input id="first-name" required />
+                <Input 
+                  id="first-name" 
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                  required 
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="last-name">Last name</Label>
-                <Input id="last-name" required />
+                <Input 
+                  id="last-name" 
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                  required 
+                />
               </div>
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" required />
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="your@email.com" 
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                required 
+              />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required />
+              <Input 
+                id="password" 
+                type="password" 
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                required 
+              />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" type="tel" placeholder="+1 (123) 456-7890" required />
+              <Input 
+                id="phone" 
+                type="tel" 
+                placeholder="+1 (123) 456-7890" 
+                value={formData.phoneNumber}
+                onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
+                required 
+              />
+            </div>
+
+            <div className="space-y-3">
+              <Label>Account Type</Label>
+              <RadioGroup 
+                value={formData.role} 
+                onValueChange={(value: 'user' | 'responder') => setFormData({...formData, role: value})}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="user" id="user" />
+                  <Label htmlFor="user">User (Need emergency help)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="responder" id="responder" />
+                  <Label htmlFor="responder">Responder (Medical professional)</Label>
+                </div>
+              </RadioGroup>
             </div>
             
             <div className="flex items-start space-x-2">
@@ -73,8 +137,12 @@ const Signup = () => {
               </Label>
             </div>
             
-            <Button type="submit" className="w-full bg-medical-600 hover:bg-medical-700">
-              Create Account
+            <Button 
+              type="submit" 
+              className="w-full bg-medical-600 hover:bg-medical-700"
+              disabled={loading}
+            >
+              {loading ? 'Creating Account...' : 'Create Account'}
             </Button>
           </form>
           
@@ -85,24 +153,6 @@ const Signup = () => {
                 Log in
               </Link>
             </p>
-          </div>
-          
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-neutral-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-neutral-50 text-neutral-500">Or continue with</span>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="w-full">
-              Google
-            </Button>
-            <Button variant="outline" className="w-full">
-              Apple
-            </Button>
           </div>
           
           <div className="mt-8 text-center">
