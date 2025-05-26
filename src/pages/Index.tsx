@@ -6,6 +6,7 @@ import ResponderDashboard from './ResponderDashboard';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/sections/HeroSection';
+import InteractiveChatbot from '@/components/ui/InteractiveChatbot';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
@@ -51,8 +52,8 @@ const Index = () => {
     );
   }
 
-  // If user is authenticated, show role-based dashboard
-  if (user && userProfile) {
+  // If user is authenticated and email is verified, show role-based dashboard
+  if (user && userProfile && user.email_confirmed_at) {
     if (userProfile.role === 'responder') {
       return <ResponderDashboard />;
     } else {
@@ -60,7 +61,7 @@ const Index = () => {
     }
   }
 
-  // If not authenticated, show the emergency access homepage
+  // If not authenticated or email not verified, show the emergency access homepage
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -70,6 +71,9 @@ const Index = () => {
       </main>
       
       <Footer />
+      
+      {/* Interactive Chatbot */}
+      <InteractiveChatbot />
     </div>
   );
 };

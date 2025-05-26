@@ -20,6 +20,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, userData: { name: string; phone_number: string; role: 'user' | 'responder' }) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  resendVerification: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session:', session?.user?.email_confirmed_at);
       setUser(session?.user ?? null);
       if (session?.user && session.user.email_confirmed_at) {
         fetchUserProfile(session.user.id);
@@ -43,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth event:', event, session?.user?.email_confirmed_at);
+      console.log('Auth event:', event, 'Email confirmed:', session?.user?.email_confirmed_at);
       
       setUser(session?.user ?? null);
       
@@ -75,7 +77,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        throw error;
+      }
       setUserProfile(data);
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -91,20 +96,65 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, userData: { name: string; phone_number: string; role: 'user' | 'responder' }) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      console.log('Attempting signup with data:', { email, userData });
+
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: userData,
+          data: {
+            name: userData.name,
+            phone_number: userData.phone_number,
+            role: userData.role
+          },
+          emailRedirectTo: `${window.location.origin}/login`
+        }
+      });
+
+      if (error) {
+        console.error('Supabase auth signup error:', error);
+        throw error;
+      }
+
+      console.log('Signup successful:', data);
+
+      toast({
+        title: "Account created successfully!",
+        description: "Please check your email to verify your account before signing in.",
+        duration: 8000,
+      });
+    } catch (error: any) {
+      console.error('Signup error:', error);
+      toast({
+        title: "Signup Error",
+        description: error.message || "Failed to create account. Please try again.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
+  const resendVerification = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
           emailRedirectTo: `${window.location.origin}/login`
         }
       });
 
       if (error) throw error;
+
+      toast({
+        title: "Verification email sent",
+        description: "Please check your email for the verification link.",
+      });
     } catch (error: any) {
+      console.error('Resend verification error:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to resend verification email",
         variant: "destructive",
       });
       throw error;
@@ -136,9 +186,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: "Welcome back to MediRescue!",
       });
     } catch (error: any) {
+      console.error('Login error:', error);
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Login Error",
+        description: error.message || "Failed to sign in. Please check your credentials.",
         variant: "destructive",
       });
       throw error;
@@ -170,6 +221,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signUp,
     signIn,
     signOut,
+    resendVerification,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

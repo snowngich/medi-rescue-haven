@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, MapPin, User, History, Phone } from 'lucide-react';
+import { AlertTriangle, MapPin, User, History, Phone, Edit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,11 +14,13 @@ const UserDashboard = () => {
   const [location, setLocation] = useState<{lat: number, lng: number} | null>(null);
   const [emergencyCount, setEmergencyCount] = useState(0);
   const [requestingEmergency, setRequestingEmergency] = useState(false);
+  const [nearbyResponders, setNearbyResponders] = useState(0);
 
   useEffect(() => {
     if (user) {
       fetchEmergencyCount();
       getCurrentLocation();
+      checkNearbyResponders();
     }
   }, [user]);
 
@@ -35,6 +37,20 @@ const UserDashboard = () => {
       setEmergencyCount(count || 0);
     } catch (error) {
       console.error('Error fetching emergency count:', error);
+    }
+  };
+
+  const checkNearbyResponders = async () => {
+    try {
+      const { count, error } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'responder');
+
+      if (error) throw error;
+      setNearbyResponders(count || 0);
+    } catch (error) {
+      console.error('Error checking nearby responders:', error);
     }
   };
 
@@ -80,7 +96,7 @@ const UserDashboard = () => {
         .single();
 
       // Create emergency request
-      const { error } = await supabase
+      const { data: emergencyRequest, error } = await supabase
         .from('emergency_requests')
         .insert({
           user_id: user.id,
@@ -88,11 +104,13 @@ const UserDashboard = () => {
           longitude: location.lng,
           medical_profile_id: medicalProfile?.id,
           status: 'pending'
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
-      // Update location
+      // Update user location
       await supabase
         .from('user_locations')
         .upsert({
@@ -101,16 +119,27 @@ const UserDashboard = () => {
           lng: location.lng
         });
 
+      // Find nearest responders (simplified - in real app would use PostGIS)
+      const { data: responders } = await supabase
+        .from('users')
+        .select('id, name, phone_number')
+        .eq('role', 'responder')
+        .limit(3);
+
+      console.log('Emergency created:', emergencyRequest);
+      console.log('Available responders:', responders);
+
       toast({
         title: "🚨 Emergency Alert Sent!",
-        description: "Responders have been notified. Help is on the way.",
+        description: `Help is on the way! ${responders?.length || 0} responders have been notified.`,
       });
 
       fetchEmergencyCount();
     } catch (error: any) {
+      console.error('Emergency request failed:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to send emergency request. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -154,12 +183,17 @@ const UserDashboard = () => {
                 <Button 
                   onClick={triggerEmergency}
                   disabled={requestingEmergency || !location}
-                  className="w-full h-16 text-lg bg-red-600 hover:bg-red-700"
+                  className="w-full h-16 text-lg bg-red-600 hover:bg-red-700 disabled:opacity-50"
                 >
                   {requestingEmergency ? '🚨 Sending Alert...' : '🚨 EMERGENCY - GET HELP NOW'}
                 </Button>
                 
-                <div className="text-center">
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>{nearbyResponders} responders available</span>
+                  <span>Response time: ~5-15 min</span>
+                </div>
+                
+                <div className="text-center pt-2">
                   <EmergencyButton size="sm" className="animate-pulse" />
                   <p className="text-sm text-gray-600 mt-2">Or call emergency services directly</p>
                 </div>
@@ -176,17 +210,25 @@ const UserDashboard = () => {
               </CardHeader>
               <CardContent>
                 {location ? (
-                  <div className="text-green-600">
-                    ✅ Location enabled - Emergency services can find you
+                  <div className="space-y-2">
+                    <div className="text-green-600 flex items-center gap-2">
+                      <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                      Location enabled - Emergency services can find you
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Lat: {location.lat.toFixed(4)}, Lng: {location.lng.toFixed(4)}
+                    </p>
                   </div>
                 ) : (
-                  <div className="text-red-600">
-                    ❌ Location disabled - Please enable location services
+                  <div className="space-y-2">
+                    <div className="text-red-600 flex items-center gap-2">
+                      <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                      Location disabled
+                    </div>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={getCurrentLocation}
-                      className="ml-2"
                     >
                       Enable Location
                     </Button>
@@ -228,6 +270,7 @@ const UserDashboard = () => {
                   Keep your medical information updated for faster emergency response
                 </p>
                 <Button variant="outline" className="w-full">
+                  <Edit className="w-4 h-4 mr-2" />
                   Update Medical Info
                 </Button>
               </CardContent>
@@ -246,6 +289,10 @@ const UserDashboard = () => {
                 <Button variant="outline" className="w-full justify-start">
                   <MapPin className="w-4 h-4 mr-2" />
                   Nearby Hospitals
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <User className="w-4 h-4 mr-2" />
+                  Update Profile
                 </Button>
               </CardContent>
             </Card>

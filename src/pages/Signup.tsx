@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
-  const { signUp } = useAuth();
+  const { signUp, resendVerification } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -24,9 +24,30 @@ const Signup = () => {
   });
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.phoneNumber) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast({
+        title: "Password Too Short",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       await signUp(formData.email, formData.password, {
@@ -35,32 +56,22 @@ const Signup = () => {
         role: formData.role
       });
       setEmailSent(true);
-      toast({
-        title: "Account created successfully!",
-        description: "Please check your email to verify your account before signing in.",
-        duration: 8000,
-      });
     } catch (error) {
       // Error is handled in the useAuth hook
+      console.error('Signup failed:', error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleResendEmail = async () => {
+    setResendLoading(true);
     try {
-      // Note: Supabase doesn't have a direct resend method, user needs to sign up again
-      toast({
-        title: "Resend verification",
-        description: "Please try signing up again if you didn't receive the email.",
-        variant: "default",
-      });
+      await resendVerification(formData.email);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to resend verification email",
-        variant: "destructive",
-      });
+      // Error is handled in the useAuth hook
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -73,16 +84,17 @@ const Signup = () => {
             <h1 className="text-2xl font-bold mb-4">Check Your Email</h1>
             <p className="text-gray-600 mb-6">
               We've sent a verification link to <strong>{formData.email}</strong>. 
-              Please click the link in your email to verify your account.
+              Please click the link in your email to verify your account, then return to log in.
             </p>
             <div className="space-y-3">
               <Button 
                 onClick={handleResendEmail}
+                disabled={resendLoading}
                 variant="outline" 
                 className="w-full"
               >
                 <Mail className="w-4 h-4 mr-2" />
-                Resend Verification Email
+                {resendLoading ? 'Sending...' : 'Resend Verification Email'}
               </Button>
               <Link to="/login">
                 <Button className="w-full bg-medical-600 hover:bg-medical-700">
@@ -149,6 +161,7 @@ const Signup = () => {
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 required 
                 minLength={6}
+                placeholder="At least 6 characters"
               />
             </div>
             
