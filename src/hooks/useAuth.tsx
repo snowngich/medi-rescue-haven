@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
+      if (session?.user && session.user.email_confirmed_at) {
         fetchUserProfile(session.user.id);
       } else {
         setLoading(false);
@@ -43,17 +43,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth event:', event, session?.user?.email_confirmed_at);
+      
       setUser(session?.user ?? null);
-      if (session?.user) {
+      
+      if (session?.user && session.user.email_confirmed_at) {
         await fetchUserProfile(session.user.id);
       } else {
         setUserProfile(null);
         setLoading(false);
+        
+        if (event === 'SIGNED_IN' && session?.user && !session.user.email_confirmed_at) {
+          toast({
+            title: "Email verification required",
+            description: "Please check your email and click the verification link before signing in.",
+            variant: "destructive",
+            duration: 8000,
+          });
+        }
       }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [toast]);
 
   const fetchUserProfile = async (userId: string) => {
     try {
@@ -83,16 +95,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email,
         password,
         options: {
-          data: userData
+          data: userData,
+          emailRedirectTo: `${window.location.origin}/login`
         }
       });
 
       if (error) throw error;
-
-      toast({
-        title: "Account created successfully",
-        description: "Please check your email to verify your account.",
-      });
     } catch (error: any) {
       toast({
         title: "Error",
@@ -105,12 +113,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
+
+      if (data.user && !data.user.email_confirmed_at) {
+        toast({
+          title: "Email verification required",
+          description: "Please check your email and click the verification link to complete your registration.",
+          variant: "destructive",
+          duration: 8000,
+        });
+        await supabase.auth.signOut();
+        return;
+      }
 
       toast({
         title: "Login successful",

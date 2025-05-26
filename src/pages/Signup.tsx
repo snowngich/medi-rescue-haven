@@ -6,11 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Phone } from 'lucide-react';
+import { Phone, Mail, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
   const { signUp } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -21,6 +23,7 @@ const Signup = () => {
     role: 'user' as 'user' | 'responder'
   });
   const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,13 +34,67 @@ const Signup = () => {
         phone_number: formData.phoneNumber,
         role: formData.role
       });
-      navigate('/login');
+      setEmailSent(true);
+      toast({
+        title: "Account created successfully!",
+        description: "Please check your email to verify your account before signing in.",
+        duration: 8000,
+      });
     } catch (error) {
       // Error is handled in the useAuth hook
     } finally {
       setLoading(false);
     }
   };
+
+  const handleResendEmail = async () => {
+    try {
+      // Note: Supabase doesn't have a direct resend method, user needs to sign up again
+      toast({
+        title: "Resend verification",
+        description: "Please try signing up again if you didn't receive the email.",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to resend verification email",
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (emailSent) {
+    return (
+      <div className="flex min-h-screen bg-neutral-50 items-center justify-center">
+        <div className="w-full max-w-md mx-auto px-4">
+          <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold mb-4">Check Your Email</h1>
+            <p className="text-gray-600 mb-6">
+              We've sent a verification link to <strong>{formData.email}</strong>. 
+              Please click the link in your email to verify your account.
+            </p>
+            <div className="space-y-3">
+              <Button 
+                onClick={handleResendEmail}
+                variant="outline" 
+                className="w-full"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Resend Verification Email
+              </Button>
+              <Link to="/login">
+                <Button className="w-full bg-medical-600 hover:bg-medical-700">
+                  Go to Login
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-neutral-50">
@@ -46,7 +103,7 @@ const Signup = () => {
         <div className="w-full max-w-sm mx-auto space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold">Create an account</h1>
-            <p className="text-neutral-500">Enter your information to get started</p>
+            <p className="text-neutral-500">Enter your information to get started with MediRescue</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -91,6 +148,7 @@ const Signup = () => {
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 required 
+                minLength={6}
               />
             </div>
             
@@ -124,7 +182,7 @@ const Signup = () => {
             </div>
             
             <div className="flex items-start space-x-2">
-              <Checkbox id="terms" className="mt-1" />
+              <Checkbox id="terms" className="mt-1" required />
               <Label htmlFor="terms" className="text-sm font-normal">
                 I agree to the{' '}
                 <Link to="/terms" className="text-medical-600 hover:underline">
@@ -176,7 +234,7 @@ const Signup = () => {
           <div className="absolute inset-0 flex flex-col justify-center p-12 text-white">
             <h2 className="text-4xl font-bold mb-4">Be prepared for emergencies</h2>
             <p className="text-xl max-w-lg">
-              Creating an account allows us to store your medical information and emergency contacts, ensuring faster and more effective help when you need it.
+              Join MediRescue to get instant access to emergency medical help when you need it most.
             </p>
           </div>
         </div>

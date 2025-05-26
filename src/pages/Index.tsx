@@ -6,10 +6,6 @@ import ResponderDashboard from './ResponderDashboard';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/sections/HeroSection';
-import ServicesSection from '@/components/sections/ServicesSection';
-import AboutSection from '@/components/sections/AboutSection';
-import PartnersSection from '@/components/sections/PartnersSection';
-import ContactSection from '@/components/sections/ContactSection';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
@@ -34,7 +30,7 @@ const Index = () => {
     if (!user && !loading) {
       toast({
         title: "Welcome to MediRescue",
-        description: "Help is just a tap away. Need assistance? Try our AI chat in the bottom right.",
+        description: "Emergency medical help is just one tap away. Sign up to get started.",
         duration: 6000,
       });
     }
@@ -64,17 +60,13 @@ const Index = () => {
     }
   }
 
-  // If not authenticated, show the marketing homepage
+  // If not authenticated, show the emergency access homepage
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-grow">
         <HeroSection />
-        <ServicesSection />
-        <AboutSection />
-        <PartnersSection />
-        <ContactSection />
       </main>
       
       <Footer />

@@ -6,19 +6,6 @@ import EmergencyButton from '../ui/EmergencyButton';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 
-interface NavItem {
-  label: string;
-  href: string;
-}
-
-const navItems: NavItem[] = [
-  { label: 'Home', href: '#' },
-  { label: 'Services', href: '#services' },
-  { label: 'About', href: '#about' },
-  { label: 'Team', href: '#team' },
-  { label: 'Contact', href: '#contact' },
-];
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,17 +33,14 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-medical-700">MediRescue</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Simplified */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-neutral-700 font-medium hover:text-medical-600 transition-colors duration-200 link-underline"
-              >
-                {item.label}
-              </a>
-            ))}
+            <Link
+              to="/"
+              className="text-neutral-700 font-medium hover:text-medical-600 transition-colors duration-200 link-underline"
+            >
+              Home
+            </Link>
           </nav>
 
           {/* Auth & Emergency Buttons */}
@@ -99,16 +83,13 @@ const Navbar = () => {
         )}
       >
         <div className="max-w-7xl mx-auto px-4 py-4 space-y-3">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="block py-2 text-neutral-700 font-medium hover:text-medical-600"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.label}
-            </a>
-          ))}
+          <Link
+            to="/"
+            className="block py-2 text-neutral-700 font-medium hover:text-medical-600"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Home
+          </Link>
           <div className="grid grid-cols-2 gap-2 pt-2">
             <Link to="/login" className="block" onClick={() => setIsMenuOpen(false)}>
               <Button variant="outline" className="w-full justify-center">Login</Button>
